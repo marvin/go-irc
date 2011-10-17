@@ -14,7 +14,7 @@ type Conn struct {
 	write chan string
 }
 
-func Dial(server string, nick string) (*Conn, os.Error) {
+func Dial(server string) (*Conn, os.Error) {
 	ipAddr, err := net.ResolveTCPAddr("tcp", server)
 	if err != nil {
 		return nil, err
@@ -61,9 +61,6 @@ func Dial(server string, nick string) (*Conn, os.Error) {
 			w.Flush()
 		}
 	}()
-
-	c.Write("NICK " + nick)
-	c.Write("USER bot * * :...")
 
 	return c, nil
 }

@@ -28,12 +28,14 @@ func main() {
 	flag.Parse()
 
 	addr := fmt.Sprintf("%s:%v", *server, *port)
-	c, err := irc.Dial(addr, *nick)
+	c, err := irc.Dial(addr)
 	if err != nil {
 		panic(err)
 	}
 
 	defer c.Close()
+
+	c.Write("NICK " + *nick)
 
 	// irc messages reader
 	go func() {
