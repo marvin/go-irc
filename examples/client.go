@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"flag"
 	"bufio"
+	"strings"
 	"github.com/husio/go-irc"
 )
 
@@ -55,6 +56,7 @@ func main() {
 		if err != nil {
 			panic(fmt.Sprintf("client write error: %s", err))
 		}
+		data = strings.TrimSpace(data)
 		if data == "help" {
 			fmt.Println(help)
 		} else {
