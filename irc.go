@@ -1,10 +1,11 @@
 package irc
 
 import (
-	"os"
-	"net"
-	"log"
 	"bufio"
+
+	"errors"
+	"log"
+	"net"
 	"strings"
 )
 
@@ -14,7 +15,7 @@ type Conn struct {
 	write chan string
 }
 
-func Dial(server string) (*Conn, os.Error) {
+func Dial(server string) (*Conn, error) {
 	ipAddr, err := net.ResolveTCPAddr("tcp", server)
 	if err != nil {
 		return nil, err
@@ -68,16 +69,16 @@ func Dial(server string) (*Conn, os.Error) {
 func (c *Conn) Close() {
 }
 
-func (c *Conn) Write(data string) os.Error {
+func (c *Conn) Write(data string) error {
 	c.write <- data
 	return nil
 }
 
-func (c *Conn) Read() (string, os.Error) {
+func (c *Conn) Read() (string, error) {
 	// blocks until message is available
 	data, ok := <-c.read
 	if !ok {
-		return "", os.NewError("Read stream closed")
+		return "", errors.New("Read stream closed")
 	}
 	return data, nil
 }
